@@ -3,6 +3,8 @@
     import { getCurrentlyPlaying } from '$lib/spotify';
     import { loginWithSpotify } from '$lib/auth';
 
+    import '../style.css';
+
     type SongInfo = {
         title: string;
         artist: string;
@@ -31,14 +33,17 @@
     });
 </script>
 
-<main>
+<main class="now-playing-bar">
     {#if error}
-        <p>{error}</p>
-        <button on:click={loginWithSpotify}>Login with Spotify</button>
+        <p class="error-message">{error}</p>
+        <button class="login-button" on:click={loginWithSpotify}>Login with Spotify</button>
     {:else if song}
-        <h2>Now Playing</h2>
-        <p><strong>{song.title}</strong> by {song.artist}</p>
-        <p>Genre: {song.genre}</p>
-        <img src={song.albumArt} alt="Album Art" width="200" />
+        <div class="now-playing-content">
+            <img class="album-art" src={song.albumArt} alt="Album Art" />
+            <div class="song-details">
+                <p class="song-title">{song.title}</p>
+                <p class="song-artist">{song.artist}</p>
+            </div>
+        </div>
     {/if}
 </main>
