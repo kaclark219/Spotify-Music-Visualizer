@@ -7,6 +7,7 @@
         title: string;
         artist: string;
         albumArt: string;
+        genre: string;
     };
 
     let song: SongInfo | null = null;
@@ -37,6 +38,7 @@
     {:else if song}
         <h2>Now Playing</h2>
         <p><strong>{song.title}</strong> by {song.artist}</p>
+        <p>Genre: {song.genre}</p>
         <img src={song.albumArt} alt="Album Art" width="200" />
     {/if}
 </main>
