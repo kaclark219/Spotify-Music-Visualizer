@@ -19,24 +19,26 @@
         const result = await getCurrentlyPlaying();
         if ('error' in result) {
             error = result.error;
-            song = null; // Ensure song is null when there's an error
+            song = null;
         } else {
             song = result;
-            error = null; // Clear any previous error
+            error = null;
         }
     }
 
     onMount(() => {
         fetchSong();
-        const interval = setInterval(fetchSong, 5000); // Refresh every 5s
-        return () => clearInterval(interval); // Cleanup on component unmount
+        const interval = setInterval(fetchSong, 3000); // Refresh every 3s
+        return () => clearInterval(interval);
     });
 </script>
 
 <main class="now-playing-bar">
     {#if error}
-        <p class="error-message">{error}</p>
-        <button class="login-button" on:click={loginWithSpotify}>Login with Spotify</button>
+        <div class="login-screen">
+            <p class="error-message">{error}</p>
+            <button class="login-button" on:click={loginWithSpotify}>Login with Spotify</button>
+        </div>
     {:else if song}
         <div class="now-playing-content">
             <img class="album-art" src={song.albumArt} alt="Album Art" />

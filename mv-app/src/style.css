@@ -13,23 +13,57 @@ body {
     padding: 10px 15px;
     display: flex;
     align-items: left;
-
 }
+
 .now-playing-content {
     display: flex;
     align-items: left;
     gap: 20px;
 }
+
 .album-art {
     width: 100px;
     height: 100px;
     border-radius: 5px;
 }
+
 .song-title {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: -20px;
 }
+
 .song-artist {
     font-size: 20px;
+}
+
+.login-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #2e3b4e;
+    color: white;
+    text-align: center;
+}
+
+.login-button {
+    background-color: #1db954;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.login-button:hover {
+    background-color: #1ed760;
+}
+
+.error-message {
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: bold;
 }
