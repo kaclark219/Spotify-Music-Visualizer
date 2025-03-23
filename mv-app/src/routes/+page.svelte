@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { getCurrentlyPlaying } from '$lib/spotify';
-    import { loginWithSpotify } from '$lib/auth';
+    import { loginWithSpotify, logoutWithSpotify } from '$lib/auth';
 
     import '../style.css';
 
@@ -33,10 +33,12 @@
     });
 </script>
 
-<main class="now-playing-bar">
+<main class={error ? "login-page" : "now-playing-page"}>
     {#if error}
-        <p class="error-message">{error}</p>
-        <button class="login-button" on:click={loginWithSpotify}>Login with Spotify</button>
+        <div class="login-container">
+            <p class="error-message">{error}</p>
+            <button class="login-button" on:click={loginWithSpotify}>Login with Spotify</button>
+        </div>
     {:else if song}
         <div class="now-playing-content">
             <img class="album-art" src={song.albumArt} alt="Album Art" />
@@ -47,3 +49,6 @@
         </div>
     {/if}
 </main>
+{#if !error}
+    <button class="logout-button" on:click={logoutWithSpotify}>Log Out</button>
+{/if}

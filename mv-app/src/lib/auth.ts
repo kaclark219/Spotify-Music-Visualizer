@@ -67,3 +67,9 @@ export async function refreshAccessToken() {
         return null;
     }
 }
+
+export function logoutWithSpotify() {
+    localStorage.removeItem('spotify_access_token');
+    localStorage.removeItem('spotify_refresh_token');
+    window.location.reload(); // Refresh to apply logout state
+}
