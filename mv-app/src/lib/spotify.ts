@@ -19,7 +19,7 @@ async function getArtistGenre(artistId: string, accessToken: string): Promise<st
     if (!response.ok) return "Unknown";
     
     const artistData = await response.json();
-    return artistData.genres.length > 0 ? artistData.genres[0] : "Unknown"; // Get first genre
+    return artistData.genres.length > 0 ? artistData.genres[0] : "Unknown";
 }
 
 export async function getCurrentlyPlaying(): Promise<SongInfo | ErrorInfo> {
@@ -37,13 +37,22 @@ export async function getCurrentlyPlaying(): Promise<SongInfo | ErrorInfo> {
     if (response.status === 204) return { error: "No song is currently playing" };
 
     const data = await response.json();
-    const artist = data.item.artists[0];
+    console.log("Spotify API response:", data);
+
+    if (!data || !data.item) {
+        return { error: "No song data available" };
+    }
+
+    const artist = data.item.artists?.[0];
+    if (!artist) return { error: "No artist found" };
+
     const genre = await getArtistGenre(artist.id, accessToken);
 
     return {
-        title: data.item.name,
-        artist: data.item.artists[0].name,
-        albumArt: data.item.album.images[0].url,
+        title: data.item.name || "Unknown Title",
+        artist: artist.name || "Unknown Artist",
+        albumArt: data.item.album?.images?.[0]?.url || "",
         genre: genre
     };
 }
+

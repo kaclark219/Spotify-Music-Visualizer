@@ -35,10 +35,8 @@
 
 <main class="now-playing-bar">
     {#if error}
-        <div class="login-screen">
-            <p class="error-message">{error}</p>
-            <button class="login-button" on:click={loginWithSpotify}>Login with Spotify</button>
-        </div>
+        <p class="error-message">{error}</p>
+        <button class="login-button" on:click={loginWithSpotify}>Login with Spotify</button>
     {:else if song}
         <div class="now-playing-content">
             <img class="album-art" src={song.albumArt} alt="Album Art" />
