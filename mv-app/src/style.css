@@ -4,7 +4,38 @@ body {
     font-family: 'Open Sans', sans-serif;
 }
 
-.now-playing-bar {
+.login-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #121212;
+}
+
+.login-container {
+    text-align: center;
+    padding: 20px;
+    background: #242334;
+    border-radius: 10px;
+}
+
+.login-button {
+    padding: 12px 20px;
+    background-color: #1DB954;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.login-button:hover {
+    background-color: #18a34c;
+}
+
+
+.now-playing-page {
     background-color: #242334;
     position: fixed;
     bottom: 0;
@@ -12,12 +43,13 @@ body {
     width: 100%;
     padding: 10px 15px;
     display: flex;
+    flex-direction: column;
     align-items: left;
 }
 
 .now-playing-content {
     display: flex;
-    align-items: left;
+    align-items: center;
     gap: 20px;
 }
 
@@ -36,3 +68,25 @@ body {
 .song-artist {
     font-size: 20px;
 }
+
+
+.logout-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background-color: white;
+    color: #242334;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.logout-button:hover,
+.logout-button:focus {
+    background-color: #9f9f9f;
+}
+
+
+/* will mess w/styling */
