@@ -18,6 +18,9 @@
     let song: SongInfo | null = null;
     let error: string | null = null;
 
+    let currentProgress = 0;
+    let currentDuration = 1;
+
     async function fetchSong() {
         const result = await getCurrentlyPlaying();
         if ('error' in result) {
@@ -26,13 +29,24 @@
         } else {
             song = result;
             error = null;
+            currentProgress = song.progress_ms;
+            currentDuration = song.duration_ms;
         }
     }
 
     onMount(() => {
         fetchSong();
         const interval = setInterval(fetchSong, 3000); // Refresh every 3s
-        return () => clearInterval(interval);
+        const progressInterval = setInterval(() => {
+            if (song && currentProgress < currentDuration) {
+                currentProgress = currentProgress + 1000;
+            }
+        }, 1000); // Visual progress update
+
+        return () => {
+            clearInterval(fetchInterval);
+            clearInterval(progressInterval);
+        };
     });
 </script>
 
@@ -49,7 +63,7 @@
                 <p class="song-title">{song.title}</p>
                 <p class="song-artist">{song.artist}</p>
             </div>
-            <SongProgressBar progress={song.progress_ms} duration={song.duration_ms} />
+            <SongProgressBar progress={currentProgress} duration={currentDuration} />
         </div>
     {/if}
 </main>
