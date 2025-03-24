@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { getCurrentlyPlaying } from '$lib/spotify';
     import { loginWithSpotify, logoutWithSpotify } from '$lib/auth';
+    import SongProgressBar from '$lib/SongProgressBar.svelte';
 
     import '../style.css';
 
@@ -10,6 +11,8 @@
         artist: string;
         albumArt: string;
         genre: string;
+        progress_ms: number;
+        duration_ms: number;
     };
 
     let song: SongInfo | null = null;
@@ -46,6 +49,7 @@
                 <p class="song-title">{song.title}</p>
                 <p class="song-artist">{song.artist}</p>
             </div>
+            <SongProgressBar progress={song.progress_ms} duration={song.duration_ms} />
         </div>
     {/if}
 </main>

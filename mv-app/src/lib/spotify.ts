@@ -5,6 +5,8 @@ type SongInfo = {
     artist: string;
     albumArt: string;
     genre: string;
+    progress_ms: number;
+    duration_ms: number;
 };
 
 type ErrorInfo = {
@@ -52,7 +54,9 @@ export async function getCurrentlyPlaying(): Promise<SongInfo | ErrorInfo> {
         title: data.item.name || "Unknown Title",
         artist: artist.name || "Unknown Artist",
         albumArt: data.item.album?.images?.[0]?.url || "",
-        genre: genre
+        genre: genre,
+        progress_ms: data.progress_ms || 0,
+        duration_ms: data.item.duration_ms || 1 // avoid divide by zero
     };
 }
 
