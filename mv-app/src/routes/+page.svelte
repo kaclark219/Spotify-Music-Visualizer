@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { getCurrentlyPlaying } from '$lib/spotify';
     import { loginWithSpotify, logoutWithSpotify } from '$lib/auth';
+    import SongProgressBar from '$lib/SongProgressBar.svelte';
 
     import '../style.css';
 
@@ -10,10 +11,15 @@
         artist: string;
         albumArt: string;
         genre: string;
+        progress_ms: number;
+        duration_ms: number;
     };
 
     let song: SongInfo | null = null;
     let error: string | null = null;
+
+    let currentProgress = 0;
+    let currentDuration = 1;
 
     async function fetchSong() {
         const result = await getCurrentlyPlaying();
@@ -23,13 +29,24 @@
         } else {
             song = result;
             error = null;
+            currentProgress = song.progress_ms;
+            currentDuration = song.duration_ms;
         }
     }
 
     onMount(() => {
         fetchSong();
         const interval = setInterval(fetchSong, 3000); // Refresh every 3s
-        return () => clearInterval(interval);
+        const progressInterval = setInterval(() => {
+            if (song && currentProgress < currentDuration) {
+                currentProgress = currentProgress + 1000;
+            }
+        }, 1000); // Visual progress update
+
+        return () => {
+            clearInterval(fetchInterval);
+            clearInterval(progressInterval);
+        };
     });
 </script>
 
@@ -46,6 +63,7 @@
                 <p class="song-title">{song.title}</p>
                 <p class="song-artist">{song.artist}</p>
             </div>
+            <SongProgressBar progress={currentProgress} duration={currentDuration} />
         </div>
     {/if}
 </main>
