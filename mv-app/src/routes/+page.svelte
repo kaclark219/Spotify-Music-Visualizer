@@ -53,7 +53,9 @@
 <main class={error ? "login-page" : "now-playing-page"}>
     {#if error}
         <div class="login-container">
-            <p class="error-message">{error}</p>
+            <img class="logo" src="/visualizer-logo.png" alt="Dissonant Pulse" />
+            <!-- <p class="error-message">{error}</p> -->
+             <p>A music visualizer experience.</p>
             <button class="login-button" on:click={loginWithSpotify}>Login with Spotify</button>
         </div>
     {:else if song}

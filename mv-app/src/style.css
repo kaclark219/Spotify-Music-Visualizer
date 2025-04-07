@@ -1,5 +1,5 @@
 body {
-    background-color: #040218;
+    background-color: #121212;
     color: white;
     font-family: 'Open Sans', sans-serif;
 }
@@ -16,8 +16,11 @@ body {
 .login-container {
     text-align: center;
     padding: 20px;
-    background: #242334;
+    background: #121212;
     border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .login-button {
@@ -36,7 +39,7 @@ body {
 
 
 .now-playing-page {
-    background-color: #242334;
+    background-color: #121212;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -88,5 +91,9 @@ body {
     background-color: #9f9f9f;
 }
 
-
-/* will mess w/styling */
+.logo {
+    width: 1400px;
+    height: auto;
+    margin-bottom: -200px;
+    margin-top: -250px;
+}

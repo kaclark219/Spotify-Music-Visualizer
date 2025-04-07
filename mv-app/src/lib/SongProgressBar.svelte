@@ -23,13 +23,14 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      width: 100%;
-      max-width: 400px;
+      width: 80%;
+      max-width: 1800px;
       margin-top: 6px;
+      margin-left: 10px;
     }
   
     .time {
-      font-size: 0.8rem;
+      font-size: 14px;
       color: #ccc;
       width: 40px;
       text-align: center;
@@ -46,7 +47,7 @@
   
     .bar {
       height: 100%;
-      background-color: #1DB954;
+      background-color: white;
       transition: width 1s linear;
     }
   </style>
