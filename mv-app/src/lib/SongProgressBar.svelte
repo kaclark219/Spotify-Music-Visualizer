@@ -23,7 +23,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      width: 80%;
+      width: 60%;
       max-width: 1800px;
       margin-top: 6px;
       margin-left: 10px;

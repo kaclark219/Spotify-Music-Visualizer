@@ -3,6 +3,7 @@
     import { getCurrentlyPlaying } from '$lib/spotify';
     import { loginWithSpotify, logoutWithSpotify } from '$lib/auth';
     import SongProgressBar from '$lib/SongProgressBar.svelte';
+    import Visualizer from '$lib/Visualizer.svelte';
 
     import '../style.css';
 
@@ -55,17 +56,22 @@
         <div class="login-container">
             <img class="logo" src="/visualizer-logo.png" alt="Dissonant Pulse" />
             <!-- <p class="error-message">{error}</p> -->
-             <p>A music visualizer experience.</p>
+            <p>A music visualization experience.</p>
             <button class="login-button" on:click={loginWithSpotify}>Login with Spotify</button>
         </div>
     {:else if song}
-        <div class="now-playing-content">
-            <img class="album-art" src={song.albumArt} alt="Album Art" />
-            <div class="song-details">
-                <p class="song-title">{song.title}</p>
-                <p class="song-artist">{song.artist}</p>
+        <div class="visualizer">
+            <Visualizer {song} />
+        </div>
+        <div class="bottom-bar">
+            <div class="now-playing-content">
+                <img class="album-art" src={song.albumArt} alt="Album Art" />
+                <div class="song-details">
+                    <p class="song-title">{song.title}</p>
+                    <p class="song-artist">{song.artist}</p>
+                </div>
+                <SongProgressBar progress={currentProgress} duration={currentDuration} />
             </div>
-            <SongProgressBar progress={currentProgress} duration={currentDuration} />
         </div>
     {/if}
 </main>

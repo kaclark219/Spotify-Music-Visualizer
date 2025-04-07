@@ -1,5 +1,5 @@
 body {
-    background-color: #121212;
+    background-color: #000000;
     color: white;
     font-family: 'Open Sans', sans-serif;
 }
@@ -39,6 +39,9 @@ body {
 
 
 .now-playing-page {
+    background-color: black;
+}
+.bottom-bar {
     background-color: #121212;
     position: fixed;
     bottom: 0;

@@ -56,7 +56,7 @@ export async function getCurrentlyPlaying(): Promise<SongInfo | ErrorInfo> {
         albumArt: data.item.album?.images?.[0]?.url || "",
         genre: genre,
         progress_ms: data.progress_ms || 0,
-        duration_ms: data.item.duration_ms || 1 // avoid divide by zero
+        duration_ms: data.item.duration_ms || 1,
     };
 }
 
