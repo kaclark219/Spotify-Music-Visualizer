@@ -9,7 +9,9 @@ export function loginWithSpotify() {
     const redirectUri = import.meta.env.VITE_SPOTIFY_REDIRECT_URI;
     const scopes = [
         'user-read-currently-playing',
-        'user-read-playback-state'
+        'user-read-playback-state',
+        'user-modify-playback-state',
+        'streaming'
     ].join('%20');
 
     const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scopes}`;
