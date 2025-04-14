@@ -1,17 +1,24 @@
 import { refreshAccessToken } from '$lib/auth';
 
-type SongInfo = {
+export type SongInfo = {
     title: string;
     artist: string;
     albumArt: string;
     genre: string;
     progress_ms: number;
     duration_ms: number;
+    is_playing: boolean;
 };
 
-type ErrorInfo = {
+export type ErrorInfo = {
     error: string;
 };
+
+export type NoTrackPlaying = {
+    noTrackPlaying: true;
+};
+
+export type GetCurrentlyPlayingResult = SongInfo | ErrorInfo | NoTrackPlaying;
 
 async function getArtistGenre(artistId: string, accessToken: string): Promise<string> {
     const response = await fetch(`https://api.spotify.com/v1/artists/${artistId}`, {
@@ -24,7 +31,7 @@ async function getArtistGenre(artistId: string, accessToken: string): Promise<st
     return artistData.genres.length > 0 ? artistData.genres[0] : "Unknown";
 }
 
-export async function getCurrentlyPlaying(): Promise<SongInfo | ErrorInfo> {
+export async function getCurrentlyPlaying(): Promise<GetCurrentlyPlayingResult> {
     let accessToken = localStorage.getItem('spotify_access_token');
 
     if (!accessToken) {
@@ -36,7 +43,9 @@ export async function getCurrentlyPlaying(): Promise<SongInfo | ErrorInfo> {
         headers: { "Authorization": `Bearer ${accessToken}` }
     });
 
-    if (response.status === 204) return { error: "No song is currently playing" };
+    if (response.status === 204) {
+        return { noTrackPlaying: true };
+    }
 
     const data = await response.json();
     console.log("Spotify API response:", data);
@@ -57,6 +66,7 @@ export async function getCurrentlyPlaying(): Promise<SongInfo | ErrorInfo> {
         genre: genre,
         progress_ms: data.progress_ms || 0,
         duration_ms: data.item.duration_ms || 1,
+        is_playing: data.is_playing ?? false,
     };
 }
 

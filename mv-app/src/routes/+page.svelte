@@ -1,9 +1,10 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { getCurrentlyPlaying } from '$lib/spotify';
+    import { getCurrentlyPlaying, type GetCurrentlyPlayingResult, type SongInfo, type NoTrackPlaying, type ErrorInfo } from '$lib/spotify';
     import { loginWithSpotify, logoutWithSpotify } from '$lib/auth';
     import SongProgressBar from '$lib/SongProgressBar.svelte';
-    import Visualizer from '$lib/Visualizer.svelte';
+    // import Visualizer from '$lib/Visualizer.svelte';
+    import Visualizer from '$lib/BubbleVisualizer.svelte';
 
     import '../style.css';
 
@@ -14,7 +15,11 @@
         genre: string;
         progress_ms: number;
         duration_ms: number;
+        is_playing: boolean;
     };
+
+    type NoTrackPlaying = { noTrackPlaying: true };
+    type ErrorInfo = { error: string };
 
     let song: SongInfo | null = null;
     let error: string | null = null;
@@ -23,10 +28,22 @@
     let currentDuration = 1;
 
     async function fetchSong() {
-        const result = await getCurrentlyPlaying();
-        if ('error' in result) {
-            error = result.error;
-            song = null;
+        const result: GetCurrentlyPlayingResult = await getCurrentlyPlaying();
+
+        // 1) If it's the "noTrackPlaying" object, keep the old 'song' and mark paused
+        if ('noTrackPlaying' in result && result.noTrackPlaying) {
+            if (song) {
+                song.is_playing = false;
+            }
+            return;
+        } else if ('error' in result) {
+            if (result.error === 'User not authenticated') {
+                error = result.error;
+                song = null;
+            } else {
+                console.error(result.error);
+            }
+            return;
         } else {
             song = result;
             error = null;
@@ -37,15 +54,15 @@
 
     onMount(() => {
         fetchSong();
-        const interval = setInterval(fetchSong, 3000); // Refresh every 3s
+        const interval = setInterval(fetchSong, 1000); // Refresh every 1s
         const progressInterval = setInterval(() => {
-            if (song && currentProgress < currentDuration) {
+            if (song?.is_playing && currentProgress < currentDuration) {
                 currentProgress = currentProgress + 1000;
             }
         }, 1000); // Visual progress update
 
         return () => {
-            clearInterval(fetchInterval);
+            clearInterval(interval);
             clearInterval(progressInterval);
         };
     });
