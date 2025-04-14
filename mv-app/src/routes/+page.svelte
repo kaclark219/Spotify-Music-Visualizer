@@ -3,10 +3,18 @@
     import { getCurrentlyPlaying, type GetCurrentlyPlayingResult, type SongInfo, type NoTrackPlaying, type ErrorInfo } from '$lib/spotify';
     import { loginWithSpotify, logoutWithSpotify } from '$lib/auth';
     import SongProgressBar from '$lib/SongProgressBar.svelte';
-    // import Visualizer from '$lib/Visualizer.svelte';
-    import Visualizer from '$lib/BubbleVisualizer.svelte';
+    import SinVisualizer from '$lib/Visualizer.svelte';
+    import BubbleViz from '$lib/BubbleVisualizer.svelte';
 
     import '../style.css';
+
+    let selectedVisualizer = 'sin';
+    let showOptions = false;
+
+    function setVisualizer(type: string) {
+        selectedVisualizer = type;
+        showOptions = false;
+    }
 
     type SongInfo = {
         title: string;
@@ -54,7 +62,7 @@
 
     onMount(() => {
         fetchSong();
-        const interval = setInterval(fetchSong, 1000); // Refresh every 1s
+        const interval = setInterval(fetchSong, 5000); // Refresh every 1s
         const progressInterval = setInterval(() => {
             if (song?.is_playing && currentProgress < currentDuration) {
                 currentProgress = currentProgress + 1000;
@@ -77,8 +85,30 @@
             <button class="login-button" on:click={loginWithSpotify}>Login with Spotify</button>
         </div>
     {:else if song}
+        <div class="options-wrapper">
+            <button class="options-toggle" on:click={() => showOptions = !showOptions}>Settings</button>
+            {#if showOptions}
+                <div class="options-popup">
+                    <p>Select Visualization:</p>
+                    <div class="visualization-buttons">
+                    <button on:click={() => setVisualizer('sin')}>
+                        <img src="/sin-preview.png" alt="Sin Waves Preview" />
+                        <span>Sin Waves</span>
+                    </button>
+                    <button on:click={() => setVisualizer('bubbles')}>
+                        <img src="/bubble-preview.png" alt="Bubble Pulse Preview" />
+                        <span>Bubble Pulse</span>
+                    </button>
+                </div>
+            </div>
+            {/if}
+        </div>
         <div class="visualizer">
-            <Visualizer {song} />
+            {#if selectedVisualizer === 'sin'}
+                <SinVisualizer {song} />
+            {:else if selectedVisualizer === 'bubbles'}
+                <BubbleViz {song} />
+            {/if}
         </div>
         <div class="bottom-bar">
             <div class="now-playing-content">

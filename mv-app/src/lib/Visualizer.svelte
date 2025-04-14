@@ -21,7 +21,6 @@
       "Summer Hate (Feat. Rain) - ZICO": "k-rap",
       "Afterthought - Joji": "hip-hop",
     };
-
   
     let canvas: HTMLCanvasElement;
     let audioContext: AudioContext;
@@ -142,7 +141,7 @@
   
       void main() {
           float noise = 3. * pnoise(position + time, vec3(10.));
-          float displacement = (frequency / 10.0) * (noise / 5.0);
+          float displacement = (frequency / 30.) * (noise / 10.);
           vec3 newPosition = position + normal * displacement;
           vColor = color1 * (sin(time * 0.1) * 0.5 + 0.5) +
                    color2 * (sin(time * 0.2) * 0.5 + 0.5) +
@@ -163,19 +162,19 @@
       animateBlob();
     });
   
-    // function initAudio() {
-    //   if (!song || !song.albumArt) return;
-    //   audioElement = new Audio(song.albumArt);
-    //   audioElement.loop = true;
-    //   audioElement.play();
+    function initAudio() {
+      if (!song || !song.albumArt) return;
+      audioElement = new Audio(song.albumArt);
+      audioElement.loop = true;
+      audioElement.play();
   
-    //   audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    //   analyser = audioContext.createAnalyser();
-    //   analyser.fftSize = 32;
-    //   const sourceNode = audioContext.createMediaElementSource(audioElement);
-    //   sourceNode.connect(analyser);
-    //   analyser.connect(audioContext.destination);
-    // }
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 32;
+      const sourceNode = audioContext.createMediaElementSource(audioElement);
+      sourceNode.connect(analyser);
+      analyser.connect(audioContext.destination);
+    }
   
     function initThreeJS() {
       scene = new THREE.Scene();
@@ -207,7 +206,7 @@
   
       if (song) {
         updateColorsForSong();
-        // initAudio();
+        initAudio();
       }
     }
   
@@ -231,30 +230,26 @@
     function animateBlob() {
       const animate = () => {
         requestAnimationFrame(animate);
-        if (!mesh || !clock || !song) return;
-
+        if (!mesh || !clock) return;
+  
         const elapsedTime = clock.getElapsedTime();
-        const material = mesh.material as THREE.ShaderMaterial;
-        material.uniforms.time.value = elapsedTime;
+        (mesh.material as THREE.ShaderMaterial).uniforms.time.value = elapsedTime;
 
         //////////////////////////////////////////////////////////////
-        // Use hardcoded BPM for frequency animation
+        //change the frequency to the avg frequency found by analyser
         //////////////////////////////////////////////////////////////
-        const songKey = `${song.title} - ${song.artist}`;
-        const bpm = hardcodedBPM[songKey] ?? 120; // fallback if not found
-        const simulatedFreq = Math.sin(elapsedTime * (bpm / 60)) * 40;
-        material.uniforms.frequency.value = simulatedFreq;
 
+        (mesh.material as THREE.ShaderMaterial).uniforms.frequency.value = 126;
+        
         renderer.render(scene, camera);
       };
-
+  
       animate();
     }
-
   
     $: if (threeInitialized && song) {
       updateColorsForSong();
-      // initAudio();
+      initAudio();
     }
 </script>
   
@@ -263,7 +258,7 @@
 <style>
     .visualizer-canvas {
         width: 100%;
-        height: 800px;
+        height: 700px;
         display: block;
     }
 </style>
