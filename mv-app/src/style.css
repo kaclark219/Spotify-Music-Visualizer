@@ -178,3 +178,16 @@ body {
     font-size: 14px;
     margin-top: 4px;
 }
+
+.color-picker-group {
+    margin-top: 20px;
+}
+
+.color-picker-group input[type="color"] {
+    width: 60px;
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+    background: none;
+    cursor: pointer;
+}

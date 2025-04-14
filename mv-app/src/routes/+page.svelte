@@ -74,6 +74,11 @@
             clearInterval(progressInterval);
         };
     });
+
+    let color1 = '#ff007f';
+    let color2 = '#00ffff';
+    let color3 = '#ffffff';
+
 </script>
 
 <main class={error ? "login-page" : "now-playing-page"}>
@@ -88,9 +93,9 @@
         <div class="options-wrapper">
             <button class="options-toggle" on:click={() => showOptions = !showOptions}>Settings</button>
             {#if showOptions}
-                <div class="options-popup">
-                    <p>Select Visualization:</p>
-                    <div class="visualization-buttons">
+            <div class="options-popup">
+                <p>Select Visualization:</p>
+                <div class="visualization-buttons">
                     <button on:click={() => setVisualizer('sin')}>
                         <img src="/sin-preview.png" alt="Sin Waves Preview" />
                         <span>Sin Waves</span>
@@ -100,7 +105,21 @@
                         <span>Bubble Pulse</span>
                     </button>
                 </div>
+            
+                <div class="color-picker-group">
+                    <p>Customize Colors:</p>
+                    <label>
+                        <input type="color" bind:value={color1} />
+                    </label>
+                    <label>
+                        <input type="color" bind:value={color2} />
+                    </label>
+                    <label>
+                        <input type="color" bind:value={color3} />
+                    </label>
+                </div>
             </div>
+            
             {/if}
         </div>
         <div class="visualizer">
