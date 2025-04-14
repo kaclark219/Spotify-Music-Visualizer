@@ -3,7 +3,8 @@
     import { getCurrentlyPlaying, type GetCurrentlyPlayingResult, type SongInfo, type NoTrackPlaying, type ErrorInfo } from '$lib/spotify';
     import { loginWithSpotify, logoutWithSpotify } from '$lib/auth';
     import SongProgressBar from '$lib/SongProgressBar.svelte';
-    import Visualizer from '$lib/Visualizer.svelte';
+    // import Visualizer from '$lib/Visualizer.svelte';
+    import Visualizer from '$lib/BubbleVisualizer.svelte';
 
     import '../style.css';
 
