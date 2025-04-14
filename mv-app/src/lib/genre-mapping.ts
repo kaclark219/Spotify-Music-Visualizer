@@ -4,7 +4,7 @@ export const genreColors: GenreColors = {
   "pop": ["#ff007f", "#ffff00", "#00bfff"], // Pink, Yellow, Blue
   "rock": ["#ff0000", "#000000", "#808080"], // Red, Black, Grey
   "hip-hop": ["#ff6347", "#f4a300", "#222222"], // Tomato, Orange, Black
-  "rlectronic": ["#00ffff", "#800080", "#ff1493"], // Cyan, Purple, Deep Pink
+  "electronic": ["#00ffff", "#800080", "#ff1493"], // Cyan, Purple, Deep Pink
   "jazz": ["#a52a2a", "#d2691e", "#ff6347"], // Brown, Chocolate, Tomato
   "classical": ["#c0c0c0", "#000080", "#808080"], // Silver, Navy, Gray
   "blues": ["#003366", "#000000", "#4682b4"], // Navy, Black, Steel Blue
@@ -36,7 +36,7 @@ export const genreColors: GenreColors = {
   "reggaeton": ["#ff6347", "#ffcc00", "#000000"], // Tomato, Yellow, Black
   "salsa": ["#ff6347", "#f0e68c", "#008000"], // Tomato, Khaki, Green
   "tropical": ["#ff6347", "#00bfff", "#32cd32"], // Tomato, Blue, Lime Green
-  "tech House": ["#ff007f", "#000080", "#ffff00"], // Pink, Navy, Yellow
+  "tech house": ["#ff007f", "#000080", "#ffff00"], // Pink, Navy, Yellow
   "dubstep": ["#800080", "#000000", "#ff1493"], // Purple, Black, Deep Pink
   "folk rock": ["#8b4513", "#d2b48c", "#32cd32"], // Saddle Brown, Tan, Lime Green
   "hard rock": ["#ff0000", "#000000", "#808080"], // Red, Black, Gray

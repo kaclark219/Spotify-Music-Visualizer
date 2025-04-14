@@ -11,7 +11,17 @@
       "Talk talk - Charli xcx": 130,
       "Drunk on Halloween - Wallows": 101,
       "Summer Hate (Feat. Rain) - ZICO": 137,
+      "Afterthought - Joji": 84,
     };
+    const hardcodedGenres: Record<string, string> = {
+      "War Pigs - Black Sabbath": "metal",
+      "That That (prod. & feat. SUGA of BTS) - PSY": "k-pop",
+      "Talk talk - Charli xcx": "pop",
+      "Drunk on Halloween - Wallows": "indie",
+      "Summer Hate (Feat. Rain) - ZICO": "k-rap",
+      "Afterthought - Joji": "hip-hop",
+    };
+
   
     let canvas: HTMLCanvasElement;
     let audioContext: AudioContext;
@@ -204,7 +214,10 @@
     function updateColorsForSong() {
       if (!threeInitialized || !mesh || !song || !song.genre) return;
   
-      const genreSet = genreColors[song.genre] || [];
+      const songKey = `${song.title} - ${song.artist}`;
+      const genre = hardcodedGenres[songKey] ?? song.genre ?? "default";
+      const genreSet = genreColors[genre] || [];
+
       const colors = genreSet.length >= 3
         ? genreSet
         : ['#ffffff', '#888888', '#000000'];
