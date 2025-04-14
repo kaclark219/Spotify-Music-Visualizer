@@ -11,6 +11,15 @@
       "Talk talk - Charli xcx": 130,
       "Drunk on Halloween - Wallows": 101,
       "Summer Hate (Feat. Rain) - ZICO": 137,
+      "Afterthought - Joji": 84,
+    };
+    const hardcodedGenres: Record<string, string> = {
+      "War Pigs - Black Sabbath": "metal",
+      "That That (prod. & feat. SUGA of BTS) - PSY": "k-pop",
+      "Talk talk - Charli xcx": "pop",
+      "Drunk on Halloween - Wallows": "indie",
+      "Summer Hate (Feat. Rain) - ZICO": "k-rap",
+      "Afterthought - Joji": "hip-hop",
     };
   
     let canvas: HTMLCanvasElement;
@@ -74,8 +83,9 @@
     }
   
     function generateBubblesForSong(songData: typeof song) {
-      const genreSet = genreColors[songData.genre] || ['#ffffff', '#ffeecc', '#ccf5ff'];
       const songKey = `${songData.title} - ${songData.artist}`;
+      const genre = hardcodedGenres[songKey] ?? songData.genre ?? 'default';
+      const genreSet = genreColors[genre] || ['#ffffff', '#ffeecc', '#ccf5ff'];
   
       if (songKey !== currentSongKey) {
         currentSongKey = songKey;
