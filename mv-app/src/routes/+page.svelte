@@ -62,7 +62,7 @@
 
     onMount(() => {
         fetchSong();
-        const interval = setInterval(fetchSong, 5000); // Refresh every 1s
+        const interval = setInterval(fetchSong, 1000); // Refresh every 1s
         const progressInterval = setInterval(() => {
             if (song?.is_playing && currentProgress < currentDuration) {
                 currentProgress = currentProgress + 1000;

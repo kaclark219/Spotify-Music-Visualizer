@@ -30,7 +30,7 @@ export const genreColors: GenreColors = {
   "bluegrass": ["#8b4513", "#deb887", "#d2b48c"], // Saddle Brown, Burly Wood, Tan
   "funk": ["#a52a2a", "#ff6347", "#800080"], // Brown, Tomato, Purple
   "world music": ["#ff6347", "#000080", "#32cd32"], // Tomato, Navy, Lime Green
-  "k-pop": ["#ff007f", "#ff1493", "#00bfff"], // Pink, Deep Pink, Blue
+  "k-pop": ["#ff77a9", "#b388eb", "#7de2fc"], // Bubblegum pink, lavender, sky blue
   "experimental": ["#808080", "#a9a9a9", "#000000"], // Gray,  , Black
   "gospel": ["#ff0000", "#ffffff", "#000080"], // Red, White, Navy
   "reggaeton": ["#ff6347", "#ffcc00", "#000000"], // Tomato, Yellow, Black

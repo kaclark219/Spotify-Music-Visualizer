@@ -35,10 +35,10 @@
       const geometry = new THREE.SphereGeometry(Math.random() * 0.4 + 0.2, 64, 64);
       const material = new THREE.MeshStandardMaterial({
         color,
-        roughness: 0.1,
-        metalness: 1.0,
-        emissive: color.clone().multiplyScalar(1.2),
-        emissiveIntensity: 3.5
+        roughness: 0.3,
+        metalness: 0.6,
+        emissive: color.clone().multiplyScalar(0.1), // or just use black
+        emissiveIntensity: 0.3
       });
       const bubble = new THREE.Mesh(geometry, material);
       bubble.position.set(
@@ -53,6 +53,7 @@
       );
       return bubble;
     }
+
   
     function initThreeJS() {
       scene = new THREE.Scene();
