@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { getCurrentlyPlaying, type GetCurrentlyPlayingResult, type SongInfo, type NoTrackPlaying, type ErrorInfo } from '$lib/spotify';
+    import { getCurrentlyPlaying, getAudioFeatures, setVolume, type GetCurrentlyPlayingResult, type SongInfo, type NoTrackPlaying, type ErrorInfo, type AudioFeatures } from '$lib/spotify';
     import { loginWithSpotify, logoutWithSpotify } from '$lib/auth';
     import SongProgressBar from '$lib/SongProgressBar.svelte';
     import SinVisualizer from '$lib/Visualizer.svelte';
@@ -10,6 +10,9 @@
 
     let selectedVisualizer = 'sin';
     let showOptions = false;
+    let audioFeatures: AudioFeatures | null = null;
+    let volumeLevel = 50; // Default volume level
+    let showVolumeControl = false;
 
     function setVisualizer(type: string) {
         selectedVisualizer = type;
@@ -17,6 +20,7 @@
     }
 
     type SongInfo = {
+        id: string;
         title: string;
         artist: string;
         albumArt: string;
@@ -24,6 +28,7 @@
         progress_ms: number;
         duration_ms: number;
         is_playing: boolean;
+        volume: number;
     };
 
     type NoTrackPlaying = { noTrackPlaying: true };
@@ -53,10 +58,42 @@
             }
             return;
         } else {
+            const oldId = song?.id;
             song = result;
             error = null;
             currentProgress = song.progress_ms;
             currentDuration = song.duration_ms;
+            volumeLevel = song.volume;
+            
+            // If we've got a new song, fetch its audio features
+            if (oldId !== song.id) {
+                fetchAudioFeatures(song.id);
+            }
+        }
+    }
+    
+    async function fetchAudioFeatures(trackId: string) {
+        try {
+            const features = await getAudioFeatures(trackId);
+            if ('error' in features) {
+                console.error("Error fetching audio features:", features.error);
+                return;
+            }
+            
+            audioFeatures = features;
+            console.log("Audio features loaded:", features);
+        } catch (error) {
+            console.error("Failed to get audio features:", error);
+        }
+    }
+    
+    async function handleVolumeChange() {
+        if (!song) return;
+        
+        // Update the volume in Spotify
+        const success = await setVolume(volumeLevel);
+        if (success && song) {
+            song.volume = volumeLevel;
         }
     }
 
@@ -105,6 +142,18 @@
                         <span>Bubble Pulse</span>
                     </button>
                 </div>
+                
+                <div class="volume-control">
+                    <p>Volume: {volumeLevel}%</p>
+                    <input 
+                        type="range" 
+                        min="0" 
+                        max="100" 
+                        bind:value={volumeLevel}
+                        on:change={handleVolumeChange}
+                    />
+                    <p class="volume-hint">Adjust volume to change visualization size</p>
+                </div>
             
                 <div class="color-picker-group">
                     <p>Customize Colors:</p>
@@ -118,6 +167,17 @@
                         <input type="color" bind:value={color3} />
                     </label>
                 </div>
+                
+                {#if audioFeatures}
+                <div class="audio-info">
+                    <p>Track Info:</p>
+                    <ul>
+                        <li>BPM: {audioFeatures.tempo.toFixed(1)}</li>
+                        <li>Energy: {(audioFeatures.energy * 100).toFixed(0)}%</li>
+                        <li>Loudness: {audioFeatures.loudness.toFixed(1)}dB</li>
+                    </ul>
+                </div>
+                {/if}
             </div>
             
             {/if}
@@ -144,3 +204,42 @@
 {#if !error}
     <button class="logout-button" on:click={logoutWithSpotify}>Log Out</button>
 {/if}
+
+<style>
+    /* Add these new styles */
+    .volume-control {
+        margin: 20px 0;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+    
+    .volume-control input[type="range"] {
+        width: 100%;
+        margin: 10px 0;
+    }
+    
+    .volume-hint {
+        font-size: 0.8em;
+        color: rgba(255, 255, 255, 0.7);
+        font-style: italic;
+        margin-top: 5px;
+    }
+    
+    .audio-info {
+        margin-top: 20px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+    
+    .audio-info ul {
+        list-style: none;
+        padding: 0;
+        margin: 10px 0 0 0;
+    }
+    
+    .audio-info li {
+        margin-bottom: 5px;
+    }
+</style>
