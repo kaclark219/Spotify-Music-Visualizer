@@ -5,6 +5,7 @@
     import SongProgressBar from '$lib/SongProgressBar.svelte';
     import SinVisualizer from '$lib/Visualizer.svelte';
     import BubbleViz from '$lib/BubbleVisualizer.svelte';
+    import { genreColors } from '$lib/genre-mapping';
 
     import '../style.css';
 
@@ -79,6 +80,28 @@
     let color2 = '#00ffff';
     let color3 = '#ffffff';
 
+    let previousSongId: string | null = null;
+
+    $: if (song && song.genre) {
+        const currentSongId = `${song.title}-${song.artist}`;
+
+        if (currentSongId !== previousSongId) {
+            previousSongId = currentSongId;
+
+            const genre = song.genre.toLowerCase();
+            console.log('Genre:', genre);
+            const genreSet = genreColors[genre];
+
+            if (genreSet?.length >= 3) {
+                [color1, color2, color3] = genreSet;
+            } else {
+                [color1, color2, color3] = ['#ffffff', '#888888', '#000000'];
+            }
+        }
+    }
+
+
+
 </script>
 
 <main class={error ? "login-page" : "now-playing-page"}>
@@ -124,9 +147,9 @@
         </div>
         <div class="visualizer">
             {#if selectedVisualizer === 'sin'}
-                <SinVisualizer {song} />
+                <SinVisualizer {song} {color1} {color2} {color3} />
             {:else if selectedVisualizer === 'bubbles'}
-                <BubbleViz {song} />
+                <BubbleViz {song} {color1} {color2} {color3} />
             {/if}
         </div>
         <div class="bottom-bar">

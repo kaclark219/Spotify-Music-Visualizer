@@ -4,6 +4,10 @@
     import { genreColors } from './genre-mapping';
   
     export let song: { title: string; artist: string; albumArt: string | null; genre: string } | null = null;
+    export let color1: string = '#ffffff';
+    export let color2: string = '#888888';
+    export let color3: string = '#000000';
+
 
     const hardcodedBPM: Record<string, number> = {
       "War Pigs - Black Sabbath": 91,
@@ -12,14 +16,13 @@
       "Drunk on Halloween - Wallows": 101,
       "Summer Hate (Feat. Rain) - ZICO": 137,
       "Afterthought - Joji": 84,
-    };
-    const hardcodedGenres: Record<string, string> = {
-      "War Pigs - Black Sabbath": "metal",
-      "That That (prod. & feat. SUGA of BTS) - PSY": "k-pop",
-      "Talk talk - Charli xcx": "pop",
-      "Drunk on Halloween - Wallows": "indie",
-      "Summer Hate (Feat. Rain) - ZICO": "k-rap",
-      "Afterthought - Joji": "hip-hop",
+      "OH GIRL - DPR LIVE": 120,
+      "claws - Charli xcx": 135,
+      "I'm Not A Vampire - Falling In Reverse": 185,
+      "Impossible - RIIZE": 128,
+      "Pink - Aerosmith": 172,
+      "Westbound Sign - Green Day": 185,
+      "Dog Days Are Over - Florence + The Machine": 150,
     };
   
     let canvas: HTMLCanvasElement;
@@ -163,18 +166,30 @@
     });
   
     function initAudio() {
-      if (!song || !song.albumArt) return;
-      audioElement = new Audio(song.albumArt);
+      if (!song || !song.previewUrl) return;
+
+      audioElement = new Audio(song.previewUrl);
       audioElement.loop = true;
-      audioElement.play();
-  
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      analyser = audioContext.createAnalyser();
-      analyser.fftSize = 32;
-      const sourceNode = audioContext.createMediaElementSource(audioElement);
-      sourceNode.connect(analyser);
-      analyser.connect(audioContext.destination);
+
+      audioElement.addEventListener('canplaythrough', () => {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 32;
+
+        const sourceNode = audioContext.createMediaElementSource(audioElement);
+        sourceNode.connect(analyser);
+        analyser.connect(audioContext.destination);
+
+        audioElement.play().catch(err => {
+          console.error('Playback error:', err);
+        });
+      });
+
+      audioElement.addEventListener('error', (e) => {
+        console.error('Audio failed to load:', e);
+      });
     }
+
   
     function initThreeJS() {
       scene = new THREE.Scene();
@@ -211,20 +226,12 @@
     }
   
     function updateColorsForSong() {
-      if (!threeInitialized || !mesh || !song || !song.genre) return;
-  
-      const songKey = `${song.title} - ${song.artist}`;
-      const genre = hardcodedGenres[songKey] ?? song.genre ?? "default";
-      const genreSet = genreColors[genre] || [];
+      if (!threeInitialized || !mesh) return;
 
-      const colors = genreSet.length >= 3
-        ? genreSet
-        : ['#ffffff', '#888888', '#000000'];
-  
       const material = mesh.material as THREE.ShaderMaterial;
-      material.uniforms.color1.value = new THREE.Color(colors[0]);
-      material.uniforms.color2.value = new THREE.Color(colors[1]);
-      material.uniforms.color3.value = new THREE.Color(colors[2]);
+      material.uniforms.color1.value = new THREE.Color(color1);
+      material.uniforms.color2.value = new THREE.Color(color2);
+      material.uniforms.color3.value = new THREE.Color(color3);
     }
   
     function animateBlob() {
@@ -239,7 +246,10 @@
         //change the frequency to the avg frequency found by analyser
         //////////////////////////////////////////////////////////////
 
-        (mesh.material as THREE.ShaderMaterial).uniforms.frequency.value = 126;
+        const songKey = `${song?.title} - ${song?.artist}`;
+        const bpm = hardcodedBPM[songKey] ?? 120; // fallback BPM
+        (mesh.material as THREE.ShaderMaterial).uniforms.frequency.value = bpm;
+
         
         renderer.render(scene, camera);
       };
