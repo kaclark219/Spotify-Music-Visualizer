@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import * as THREE from 'three';
 
-  export let song: { title: string; artist: string; albumArt: string | null; genre: string } | null = null;
+  export let song: { title: string; artist: string; albumArt: string | null; genre: string; volume: number; } | null = null;
   export let color1: string = '#ffffff';
   export let color2: string = '#ffeecc';
   export let color3: string = '#ccf5ff';
@@ -31,6 +31,7 @@
   let clock: THREE.Clock;
   let threeInitialized = false;
   let currentSongKey = '';
+  let currentVolume = 50;
 
   function createBubble(color: THREE.Color): THREE.Mesh {
     const geometry = new THREE.SphereGeometry(Math.random() * 0.4 + 0.2, 64, 64);
@@ -97,6 +98,26 @@
         bubbles.push(bubble);
       }
     }
+    if (songData.volume !== undefined) {
+      currentVolume = songData.volume;
+    }
+  }
+
+  function calculateVolumeScale(): number {
+    // Get the current volume from song or hardcoded value
+    const volume = song?.volume ?? currentVolume;
+    const clampedVolume = Math.max(0, Math.min(volume, 100));
+
+
+    const normalized = clampedVolume / 100;
+
+
+    const minScale = 0.5;
+    const maxScale = 1.0;
+
+    const scale = minScale + (maxScale - minScale) * Math.pow(normalized, 1.2);
+
+    return scale;
   }
 
   function animateBubbles() {
@@ -108,9 +129,10 @@
       const songKey = `${song.title} - ${song.artist}`;
       const bpm = hardcodedBPM[songKey] ?? 120;
       const beat = Math.abs(Math.sin(elapsed * (bpm / 60)));
+      const volumeScale = calculateVolumeScale();
 
       for (const bubble of bubbles) {
-        const scale = 1 + beat * 0.4;
+        const scale = 0.5 + beat * volumeScale;
         bubble.scale.set(scale, scale, scale);
 
         bubble.position.add(bubble.userData.velocity);
