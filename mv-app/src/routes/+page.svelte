@@ -214,20 +214,4 @@
         margin-top: 5px;
     }
     
-    .audio-info {
-        margin-top: 20px;
-        padding: 10px;
-        background: rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
-    
-    .audio-info ul {
-        list-style: none;
-        padding: 0;
-        margin: 10px 0 0 0;
-    }
-    
-    .audio-info li {
-        margin-bottom: 5px;
-    }
 </style>
