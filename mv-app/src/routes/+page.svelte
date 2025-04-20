@@ -5,6 +5,7 @@
     import SongProgressBar from '$lib/SongProgressBar.svelte';
     import SinVisualizer from '$lib/Visualizer.svelte';
     import BubbleViz from '$lib/BubbleVisualizer.svelte';
+    import WaveViz from '$lib/WaveVisualizer.svelte';
     import { genreColors } from '$lib/genre-mapping';
 
     import '../style.css';
@@ -127,6 +128,10 @@
                         <img src="/bubble-preview.png" alt="Bubble Pulse Preview" />
                         <span>Bubble Pulse</span>
                     </button>
+                    <button on:click={() => setVisualizer('waves')}>
+                        <img src="/ring-preview.PNG" alt="Wave Ring Preview" />
+                        <span>Wave Ring</span>
+                    </button>
                 </div>
             
                 <div class="color-picker-group">
@@ -150,6 +155,8 @@
                 <SinVisualizer {song} {color1} {color2} {color3} />
             {:else if selectedVisualizer === 'bubbles'}
                 <BubbleViz {song} {color1} {color2} {color3} />
+            {:else if selectedVisualizer === 'waves'}
+                <WaveViz {song} {color1} {color2} {color3} />
             {/if}
         </div>
         <div class="bottom-bar">
