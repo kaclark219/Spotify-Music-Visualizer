@@ -3,7 +3,7 @@
     import * as THREE from 'three';
     import { genreColors } from './genre-mapping';
   
-    export let song: { title: string; artist: string; albumArt: string | null; genre: string } | null = null;
+    export let song: { title: string; artist: string; albumArt: string | null; genre: string; volume: number } | null = null;
     export let color1: string = '#ffffff';
     export let color2: string = '#888888';
     export let color3: string = '#000000';
@@ -36,6 +36,10 @@
     let mesh: THREE.Mesh | null = null;
     let clock: THREE.Clock;
     let threeInitialized = false;
+
+    const BASE_SIZE = 7;
+    let currentVolume = 50;
+    let scaleMultiplier = 1.0;
   
     const vertexShader = `
       uniform float time;
@@ -233,6 +237,23 @@
       material.uniforms.color2.value = new THREE.Color(color2);
       material.uniforms.color3.value = new THREE.Color(color3);
     }
+
+    function calculateVolumeScale(): number {
+      // Get the current volume from song or hardcoded value
+      const volume = song?.volume ?? currentVolume;
+      const clampedVolume = Math.max(0, Math.min(volume, 100));
+
+
+      const normalized = clampedVolume / 100;
+
+
+      const minScale = 0.5;
+      const maxScale = 1.0;
+
+      const scale = minScale + (maxScale - minScale) * Math.pow(normalized, 1.2);
+
+      return scale;
+    }
   
     function animateBlob() {
       const animate = () => {
@@ -250,6 +271,9 @@
         const bpm = hardcodedBPM[songKey] ?? 120; // fallback BPM
         (mesh.material as THREE.ShaderMaterial).uniforms.frequency.value = bpm;
 
+        const scaleFactor = calculateVolumeScale();
+        mesh.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
         
         renderer.render(scene, camera);
       };
@@ -260,6 +284,9 @@
     $: if (threeInitialized && song) {
       updateColorsForSong();
       initAudio();
+      if (song.volume !== undefined) {
+        currentVolume = song.volume;
+      }
     }
 </script>
   

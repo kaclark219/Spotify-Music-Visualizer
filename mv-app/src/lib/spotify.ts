@@ -8,6 +8,7 @@ export type SongInfo = {
     progress_ms: number;
     duration_ms: number;
     is_playing: boolean;
+    volume: number;
 };
 
 export type ErrorInfo = {
@@ -59,6 +60,17 @@ export async function getCurrentlyPlaying(): Promise<GetCurrentlyPlayingResult> 
 
     const genre = await getArtistGenre(artist.id, accessToken);
 
+    const playerResponse = await fetch("https://api.spotify.com/v1/me/player", {
+        headers: { "Authorization": `Bearer ${accessToken}` }
+    });
+    
+    let volume = 50; // Default value
+    
+    if (playerResponse.ok) {
+        const playerData = await playerResponse.json();
+        volume = playerData.device?.volume_percent || 50;
+    }
+
     return {
         title: data.item.name || "Unknown Title",
         artist: artist.name || "Unknown Artist",
@@ -67,6 +79,21 @@ export async function getCurrentlyPlaying(): Promise<GetCurrentlyPlayingResult> 
         progress_ms: data.progress_ms || 0,
         duration_ms: data.item.duration_ms || 1,
         is_playing: data.is_playing ?? false,
+        volume: volume
     };
 }
 
+export async function setVolume(volumeLevel: number): Promise<boolean> {
+    let accessToken = localStorage.getItem('spotify_access_token');
+
+    if (!accessToken) {
+        accessToken = await refreshAccessToken();
+        if (!accessToken) return false;
+    }
+
+    const response = await fetch(`https://api.spotify.com/v1/me/player/volume?volume_percent=${volumeLevel}`, {
+        method: 'PUT',
+        headers: { "Authorization": `Bearer ${accessToken}` }
+    });
+    return response.ok;
+}
