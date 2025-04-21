@@ -59,5 +59,6 @@ export const genreColors: GenreColors = {
   "soft pop": ["#ffb3ba", "#ff677d", "#d4a5a5"], // Light Pink, Soft Pink, Light Brown
   "classic rock": ["#ff0000", "#000000", "#ffb300"], // Red, Black, Warm Yellow
   "baroque pop": ["#00BCD4", "#24496b", "#deb887"], // Teal, Denim, Burly Wood
+  "psychedelic pop": ["#9ecfe8", "#b6c993", "#cf93a6"], // Light Blue, Olive Green, Light Pink
   "Unknown": ["#ffffff", "#d3d3d3", "#a9a9a9"], // White, Light Gray, Dark Gray
 };

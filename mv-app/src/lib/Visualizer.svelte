@@ -23,6 +23,7 @@
       "Pink - Aerosmith": 172,
       "Westbound Sign - Green Day": 185,
       "Dog Days Are Over - Florence + The Machine": 150,
+      "Potion - Djo": 164,
     };
   
     let canvas: HTMLCanvasElement;

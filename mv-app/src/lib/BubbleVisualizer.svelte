@@ -21,6 +21,7 @@
     "Pink - Aerosmith": 172,
     "Westbound Sign - Green Day": 185,
     "Dog Days Are Over - Florence + The Machine": 150,
+    "Potion - Djo": 164,
   };
 
   let canvas: HTMLCanvasElement;
@@ -132,8 +133,10 @@
       const volumeScale = calculateVolumeScale();
 
       for (const bubble of bubbles) {
-        const scale = 0.5 + beat * volumeScale;
+        const baseScale = 0.5 + beat;
+        const scale = baseScale * calculateVolumeScale();
         bubble.scale.set(scale, scale, scale);
+
 
         bubble.position.add(bubble.userData.velocity);
         bubble.rotation.y += 0.008 + beat * 0.004;
