@@ -200,25 +200,3 @@
     <button class="logout-button" on:click={logoutWithSpotify}>Log Out</button>
 {/if}
 
-<style>
-    /* Add these new styles */
-    .volume-control {
-        margin: 20px 0;
-        padding: 10px;
-        background: rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
-    
-    .volume-control input[type="range"] {
-        width: 100%;
-        margin: 10px 0;
-    }
-    
-    .volume-hint {
-        font-size: 0.8em;
-        color: rgba(255, 255, 255, 0.7);
-        font-style: italic;
-        margin-top: 5px;
-    }
-    
-</style>
